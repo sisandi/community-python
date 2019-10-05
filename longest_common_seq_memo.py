@@ -1,63 +1,63 @@
-# """
-# Given two sequences, x[1:m] and y[1:n],
-# find a longest sequence common to both. Uses memoization
-# to store intermediate results so comparisons between same
-# string indices are not duplicated
-#
-# BASE CASE:
-# There are no letters in one string to compare
-#
-# CASE 1:
-# The last letter of P and Q are the same
-#
-# CASE 2:
-# The last letter of P and Q are different
-# """
+"""
+Given two sequences, x[1:m] and y[1:n],
+find a longest sequence common to both. Uses memoization
+to store intermediate results so comparisons between same
+string indices are not duplicated
+
+BASE CASE:
+There are no letters in one string to compare
+
+CASE 1:
+The last letter of P and Q are the same
+
+CASE 2:
+The last letter of P and Q are different
+"""
 
 from datetime import datetime
 
 
-def LCS(P, Q, n, m):
-    """
+class Solution:
 
-    :param P: str
-    :param Q: str
-    :param n: int
-    :param m: int
-    :return:
-    """
+    def __init__(self):
+        self.matrix = {}
 
-    result = None
-    keyy = f'{n-1},{m-1}'
-    if keyy in matrix.keys():
-        return matrix[keyy]
+    def longestCommonSubsequence(self, P: str, Q: str) -> int:
 
-    # BASE CASE
-    if n == 0 or m == 0:
+        n = len(P)
+        m = len(Q)
+
         result = 0
+        keyy = f'{n - 1},{m - 1}'
+        if keyy in self.matrix.keys():
+            return self.matrix[keyy]
 
-    # CASE 1
-    elif P[n-1] == Q[m-1]:
-        result = 1 + LCS(P, Q, n-1, m-1)
+        # BASE CASE
+        if n == 0 or m == 0:
+            result = 0
 
-    # CASE 2
-    elif P[n-1] != Q[m-1]:
-        tmp1 = LCS(P, Q, n-1, m)
-        tmp2 = LCS(P, Q, n, m-1)
-        result = max(tmp1, tmp2)
+        # CASE 1
+        elif P[n - 1] == Q[m - 1]:
+            result = 1 + self.longestCommonSubsequence(P[:-1], Q[:-1])
 
-    matrix[f'{n-1},{m-1}'] = result
-    return result
+        # CASE 2
+        elif P[n - 1] != Q[m - 1]:
+            tmp1 = self.longestCommonSubsequence(P[:-1], Q)
+            tmp2 = self.longestCommonSubsequence(P, Q[:-1])
+            result = max(tmp1, tmp2)
+
+        self.matrix[f'{n - 1},{m - 1}'] = result
+        return result
 
 
-x = "ABCBDAB"
-y = "BDCABA"
+x = "alibnalwieefasdfv"
+y = "wliheglaijwegasv"
 
-ans = ["BDAB", "BCAB", "BCBA"]
 
-matrix = {}
 start = datetime.now()
-print(LCS(x, y, len(x), len(y)))
+t = Solution()
+print(t.longestCommonSubsequence(x, y))
+
 end = datetime.now()
 delta = end-start
 print(delta)
